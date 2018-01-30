@@ -1,0 +1,7 @@
+---
+# tasks file for tnation.dns
+- name: set dns nameservers
+  lineinfile: path=/etc/resolv.conf line="{{ item }}"
+  with_items:
+  	- "nameserver 10.0.0.180"
+  	- "domain home.internal"
