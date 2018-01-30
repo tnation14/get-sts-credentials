@@ -1,0 +1,12 @@
+version: '3'
+services:
+  serverless:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    working_dir: /opt/pinkmoon-lambda-function
+    env_file: .env
+    entrypoint: bash
+    volumes:
+      - "./package.json:/opt/pinkmoon-lambda-function/package.json"
+      - ./python:/opt/pinkmoon-lambda-function

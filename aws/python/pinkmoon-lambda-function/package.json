@@ -1,0 +1,17 @@
+{
+  "name": "pinkmoon-lambda-function",
+  "version": "0.1.0",
+  "description": "Python lambda function that alerts when pinkmoon is restocking.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "python",
+    "lambda",
+    "aws",
+    "twitter"
+  ],
+  "author": "Taylor Nation (tnation14@gmail.com)",
+  "license": "Apache-2.0"
+}
