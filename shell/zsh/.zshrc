@@ -105,7 +105,7 @@ function workon() {
   WORKDIR=~/Documents/projects/src/$1
   if ! [ -d $WORKDIR ]
   then
-    mkdir $WORKDIR
+    mkdir -p $WORKDIR
   fi
 
   cd $WORKDIR
