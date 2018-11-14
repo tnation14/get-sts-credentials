@@ -3,6 +3,9 @@ export ZSH=/Users/tnation/.oh-my-zsh
 export VENV_DIR=$HOME/.venvs
 export EDITOR=/usr/local/bin/EDITOR
 export HOMEBREW_GITHUB_API_TOKEN=""
+
+# Set user environment variables
+source ~/.zsh/env
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -105,64 +108,11 @@ function workon() {
   WORKDIR=~/Documents/projects/src/$1
   if ! [ -d $WORKDIR ]
   then
-    mkdir $WORKDIR
+    mkdir -p $WORKDIR
   fi
 
   cd $WORKDIR
   
-#  if ls "~/.ssh/$1*" > /dev/null 2>&1
-#  then
-#    for file in ~/.ssh/$1 do
-#      ssh-add ~/.ssh/$file
-#    done
-#  fi 
-
-  # create environment vars file, source during activation
-  if ! [ -f $VARSFILE ] 
-  then
-    echo "creating environment variables file at $VARSFILE..." 
-    echo "export WORKSPACE=$1" >> $VARSFILE
-  fi
-
- # Give the user a chance to associate a github url
-  if ! $(grep "GITHUB=" $VARSFILE)
-  then
-    echo "Add github URL?"
-    read RESPONSE
-    while [ $RESPONSE != "y" -a $RESPONSE != "n" ]
-    do
-      echo "Your response $RESPONSE is invalid. Please type y (continue)" \
-           "or n (exit)"
-      read RESPONSE
-    done
-
-    echo "Azavea repo?"
-    read AZAVEA
-    while [ $AZAVEA != "y" -a $AZAVEA != "n" ]
-    do
-      echo "Your response $AZAVEA is invalid. Please type y (continue)" \
-           "or n (exit)"
-      read AZAVEA
-    done
-
-    if [ "$RESPONSE" = "y" ]
-    then
-      if [ "$AZAVEA" = "y" ]
-        then
-          GITHUB="https://github.com/azavea/$1"
-      else
-        echo "Enter github URL: "
-        read GITHUB
-        while [ -z $GITHUB ]
-        do
-          echo "Please provide a github url"
-          read GITHUB
-        done
-      fi
-      echo "Writing to $VARSFILE"
-      echo "export GITHUB=$GITHUB" >> $VARSFILE
-    fi
-  fi
 
   # Start virtualenv if it exists, create it if it doesn't.
   if [ -d $VENV_DIR/$1-venv/ ]
@@ -192,7 +142,15 @@ function workon() {
   else
     echo "Venv $1 does not exist. Creating now..."
     virtualenv $VENV_DIR/$1
-    
+
+
+    # create environment vars file, source during activation
+    if ! [ -f $VARSFILE ] 
+    then
+      echo "creating environment variables file at $VARSFILE..." 
+      echo "export WORKSPACE=$1" > $VARSFILE
+    fi
+
     # Make sure we import workspace environment variables when we activate
     if ! $(grep "source $VARSFILE" $VENV_DIR/$1/bin/activate)
     then
@@ -206,6 +164,20 @@ function workon() {
   if ! [ -d $WORKDIR/.git ]
   then
     pushd ..
+
+ # Give the user a chance to associate a github url
+    if ! $(grep "GITHUB=" $VARSFILE)
+    then
+  	echo "Enter git repo URI: "
+	read GITHUB
+	while [ -z $GITHUB ]
+	do
+	  echo "Please provide a git repo uri"
+	  read GITHUB
+	done
+	echo "Writing to $VARSFILE"
+	echo "export GITHUB=$GITHUB" >> $VARSFILE
+    fi
     git clone $GITHUB
     popd
   fi
@@ -356,3 +328,4 @@ export NVM_DIR="/Users/tnation/.nvm"
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /Users/tnation/Documents/projects/src/cicero-monitor/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tnation/Documents/projects/src/cicero-monitor/node_modules/tabtab/.completions/sls.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
