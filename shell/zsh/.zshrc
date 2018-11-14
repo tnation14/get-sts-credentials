@@ -3,6 +3,9 @@ export ZSH=/Users/tnation/.oh-my-zsh
 export VENV_DIR=$HOME/.venvs
 export EDITOR=/usr/local/bin/EDITOR
 export HOMEBREW_GITHUB_API_TOKEN=""
+
+# Set user environment variables
+source ~/.zsh/env
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
